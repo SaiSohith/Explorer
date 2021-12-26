@@ -2,14 +2,15 @@ package com.sdp.explorer.models;
 
 //import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 
 @Entity
 @Table
 public class RegisterUser {
 	 @Id
+	 @GeneratedValue(strategy = GenerationType.IDENTITY)
 	 int id;
 	 String name;
 	 String email;

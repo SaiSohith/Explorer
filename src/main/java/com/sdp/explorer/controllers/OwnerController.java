@@ -23,4 +23,10 @@ public class OwnerController {
         return as.lognOwner(l);
     }
 
+    @PostMapping("/ownerhomestayoffer")
+    public ApiResp HomestayOffer(@RequestBody OwnerHomestayOffer offer){
+        System.out.println(offer.getHomestayname());
+        return as.homeStaydetails(offer);
+    }
+
 }

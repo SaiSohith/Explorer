@@ -1,5 +1,6 @@
 package com.sdp.explorer.models;
 
+
 public class LoginUser {
     public String email;
     public String psw;
