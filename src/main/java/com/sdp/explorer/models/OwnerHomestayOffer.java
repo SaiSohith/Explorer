@@ -1,4 +1,5 @@
 package com.sdp.explorer.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 
 @Entity
@@ -13,6 +14,25 @@ boolean offerfood;
 float lat;
 float lang;
 String Address;
+String imgpath;
+
+    public String getImgpath() {
+        return imgpath;
+    }
+
+    public void setImgpath(String imgpath) {
+        this.imgpath = imgpath;
+    }
+
+    public String getVidpath() {
+        return vidpath;
+    }
+
+    public void setVidpath(String vidpath) {
+        this.vidpath = vidpath;
+    }
+
+    String vidpath;
 
     public int getOfferid() {
         return offerid;

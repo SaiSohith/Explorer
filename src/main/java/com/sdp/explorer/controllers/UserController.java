@@ -35,4 +35,9 @@ public class UserController {
         return  us.getHomestays();
     }
 
+    @GetMapping("/homestays/{id}")
+    public ApiResp getHomestaybyId(@PathVariable int id){
+        return  us.getHomestaysbyId(id);
+    }
+
 }

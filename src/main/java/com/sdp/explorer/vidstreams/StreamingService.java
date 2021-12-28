@@ -13,13 +13,14 @@ import reactor.core.publisher.Mono;
 @Service
 public class StreamingService {
 
-    private static final String FORMAT = "classpath:static/%s.mp4";
+    private static final String FORMAT = "videos/%s.mp4";
 
     @Autowired
     private ResourceLoader resourceLoader;
 
-    public Mono<Resource> getVideo(String title) {
-        return Mono.fromSupplier(() -> this.resourceLoader.getResource(String.format(FORMAT, title)));
+    public Mono<Resource> getVideo(String path) {
+        System.out.println(String.format(FORMAT, path));
+        return Mono.fromSupplier(() -> this.resourceLoader.getResource(String.format(FORMAT, path)));
     }
 
 }

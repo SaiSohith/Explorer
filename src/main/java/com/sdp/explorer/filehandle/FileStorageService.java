@@ -1,5 +1,6 @@
 package com.sdp.explorer.filehandle;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -32,7 +33,7 @@ public class FileStorageService {
         }
     }
 
-    public String storeFile(MultipartFile file) {
+    public String storeFile(MultipartFile file,String ownerid) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -42,11 +43,18 @@ public class FileStorageService {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
 
-            // Copy file to the target location (Replacing existing file with the same name)
-            Path targetLocation = this.fileStorageLocation.resolve("changed_file_name_"+fileName);
+
+
+            // Copy file to the target location (Replacing existing file with the same name
+            File pathAsFile = new File(fileStorageLocation.toString()+"\\"+ownerid);
+
+            if (!Files.exists(Paths.get(fileStorageLocation.toString()+"\\"+ownerid))) {
+                pathAsFile.mkdir();
+            }
+            Path targetLocation = this.fileStorageLocation.resolve(ownerid+"/"+fileName);
 //            System.out.println(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
-            return fileName;
+            return ownerid+"/"+fileName;
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }

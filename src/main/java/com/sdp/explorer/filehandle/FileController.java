@@ -1,5 +1,7 @@
 package com.sdp.explorer.filehandle;
 
+import com.sdp.explorer.models.OwnerHomestayOffer;
+import com.sdp.explorer.repositories.OwnerHomestayrepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,27 +25,45 @@ public class FileController {
 
     @Autowired
     private FileStorageService fileStorageService;
-    
-    @PostMapping("/uploadFile")
-    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
-        String fileName = fileStorageService.storeFile(file);
 
+    @Autowired
+    public OwnerHomestayrepo or;
+
+    @PostMapping("/uploadVideo/{ownerid}")
+    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file,@PathVariable("ownerid") String ownerid) {
+        String fileName = fileStorageService.storeFile(file,ownerid);
+        OwnerHomestayOffer oho = or.findByOfferid(Integer.parseInt(ownerid));
         String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
+                .path("/")
                 .path(fileName)
                 .toUriString();
-
+        oho.setVidpath(fileDownloadUri);
+        or.save(oho);
         return new UploadFileResponse(fileName, fileDownloadUri,
                 file.getContentType(), file.getSize());
     }
 
-    @PostMapping("/uploadMultipleFiles")
-    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.asList(files)
-                .stream()
-                .map(file -> uploadFile(file))
-                .collect(Collectors.toList());
+    @PostMapping("/uploadImg/{ownerid}")
+    public UploadFileResponse uploadFile2(@RequestParam("file") MultipartFile file,@PathVariable("ownerid") String ownerid) {
+        String fileName = fileStorageService.storeFile(file,ownerid);
+        OwnerHomestayOffer oho = or.findByOfferid(Integer.parseInt(ownerid));
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/")
+                .path(fileName)
+                .toUriString();
+        oho.setImgpath(fileDownloadUri);
+        or.save(oho);
+        return new UploadFileResponse(fileName, fileDownloadUri,
+                file.getContentType(), file.getSize());
     }
+
+//    @PostMapping("/uploadMultipleFiles")
+//    public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
+//        return Arrays.asList(files)
+//                .stream()
+//                .map(file -> uploadFile(file))
+//                .collect(Collectors.toList());
+//    }
 
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {

@@ -39,5 +39,7 @@ public class UserService {
 		System.out.println();
 		return new ApiResp(200,"success",oh.findAll());
 	}
-
+	public ApiResp getHomestaysbyId(int id){
+		return new ApiResp(200,"success",oh.findByOfferid(id));
+	}
 }
